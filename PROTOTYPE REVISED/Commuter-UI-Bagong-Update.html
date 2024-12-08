@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeepney Reservation System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        #app {
+            display: flex;
+            width: 100%;
+        }
+        
+        .circle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .circle-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px solid #007bff;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        #sidebar {
+            height: 710px;
+            background-color: #1e1e2e;
+            width: 250px;
+            padding: 20px;
+            color: #ffffff;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        #sidebar h2 {
+            margin-top: 0;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        #sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        #sidebar ul li {
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        #sidebar ul li:hover {
+            background-color: #343a40;
+        }
+        
+        #main-content {
+            flex: 1;
+            padding: 30px;
+            background-color: #121212;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        h2 {
+            font-weight: 700;
+            color: #007bff;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            background-color: #1e1e2e;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        form label {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        form input,
+        form select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #2e2e3e;
+            color: #ffffff;
+        }
+        
+        form button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        form button:hover {
+            background: linear-gradient(to bottom, #1e88e5 0%, #1263a1 100%);
+        }
+        
+        #price {
+            background-color: #2e2e3e;
+        }
+        
+        #history-list,
+        #payment-list,
+        #schedule-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        #history-list li,
+        #payment-list li,
+        #schedule-list li {
+            background-color: #2e2e3e;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+        .cancel-button {
+            padding: 5px 10px;
+            background-color: #dc3545;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .cancel-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+    <div id="app">
+        <div id="sidebar">
+            <h2>COMMUSWIFT</h2>
+            <div class="circle">
+                <img src="assets/img/complogo.png" alt="Image Description" class="circle-img">
+            </div>
+            <ul>
+                <li onclick="showPage('booking')">Book a Jeepney</li>
+                <li onclick="showPage('history')">Booking History</li>
+                <li onclick="showPage('payment')">Payment History</li>
+                <li onclick="showPage('schedule')">Schedule History</li>
+                <li onclick="showPage('maps')">Location</li>
+            </ul>
+        </div>
+        <div id="main-content">
+            <div id="booking" class="page active">
+                <h2>Book a Jeepney</h2>
+                <form id="booking-form">
+                    <label for="destination">Destination:</label>
+                    <select id="destination" name="destination" onchange="updatePrice(); updateTimeOptions()" required>
+                        <option value="">Select Location</option>
+                        <option value="Camp 7" data-price="30">Camp 7 - Town</option>
+                        <option value="Camp 7" data-price="30">Town - Camp 7</option>
+                        <option value="Teachers Camp" data-price="35">Teachers Camp - Town</option>
+                        <option value="Teachers Camp" data-price="35">Town - Teachers Camp</option>
+                        <option value="Irisan" data-price="40">Irisan - Town</option>
+                        <option value="Irisan" data-price="40">Town - Irisan</option>
+                        <option value="Loakan" data-price="30">Loakan - Town</option>
+                        <option value="Loakan" data-price="30">Town - Loakan</option>
+
+                    </select>
+
+                    <label for="name">Name:</label>
+                    <input type="name" id="name" name="name" required>
+
+                    <label for="gmail-email">Gmail/Email:</label>
+                    <input type="gmail-email" id="gmail-email" name="Gmail-Email" required>
+
+                    <label for="time">Time:</label>
+                    <select id="time" name="time" required>
+                        <option value="">Set Time for reservation</option>
+                    </select>
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                    <label for="seats">Number of Seats:</label>
+                    <input type="number" id="seats" name="seats" min="1" value="1" onchange="updatePrice()" required>
+                    <label for="price">Price:</label>
+                    <input type="text" id="price" name="price" readonly>
+                    <button type="submit">Book Now</button>
+                </form>
+            </div>
+            <div id="history" class="page">
+                <h2>Booking History</h2>
+                <ul id="history-list"></ul>
+            </div>
+            <div id="payment" class="page">
+                <h2>Payment History</h2>
+                <ul id="payment-list"></ul>
+            </div>
+            <div id="schedule" class="page">
+                <h2>Schedule History</h2>
+                <ul id="schedule-list"></ul>
+            </div>
+            <div id="maps" class="page">
+                <iframe src="https://my.atlist.com/map/9a8b69ac-1f60-4e01-89e2-175bd82bb7a7/?share=true" allow="geolocation 'self' https://my.atlist.com" width="100%" height="710px" loading="lazy" frameborder="0" scrolling="no" allowfullscreen id="atlist-embed"></iframe>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('booking-form').addEventListener('submit', bookBus);
+    showPage('booking');
+
+    const today = new Date();
+    const minDate = today.toISOString().split('T')[0];
+    document.getElementById('date').setAttribute('min', minDate);
+});
+
+function showPage(pageId) {
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(page => {
+        page.classList.remove('active');
+    });
+    document.getElementById(pageId).classList.add('active');
+}
+
+function isValidEmail(email) {
+    const emailPattern = /^[^\s@]+@gmail\.com$/;
+    return emailPattern.test(email);
+}
+
+function updatePrice() {
+    const destinationSelect = document.getElementById('destination');
+    const selectedOption = destinationSelect.options[destinationSelect.selectedIndex];
+    const pricePerSeat = parseInt(selectedOption.getAttribute('data-price')) || 0;
+    const numberOfSeats = parseInt(document.getElementById('seats').value) || 1;
+
+    if (numberOfSeats > 20) {
+        alert('You cannot book more than 20 seats.');
+        document.getElementById('seats').value = 20;
+        return;
+    }
+
+    const totalPrice = pricePerSeat * numberOfSeats;
+    document.getElementById('price').value = `₱${totalPrice}`;
+}
+
+const timeOptions = {
+    "Camp 7": ["8:00 PM - 9:00 PM", "9:00 PM - 10:00 PM", "10:00 PM - 10:30 PM", "10:30 PM - 11:00 PM","11:00 PM - 12:00 AM"],
+    "Teachers Camp": ["9:00 PM - 9:40 PM", "9:40 PM - 10:30 PM", "10:30 PM - 11:30 PM", "11:30 PM - 12:00 AM"],
+    "Irisan": ["9:40 PM - 10:30 PM", "10:30 PM - 11:00 PM"],
+    "Loakan": ["10:30 PM - 11:00 PM", "11:00 PM - 12:00 AM"]
+};
+
+function updateTimeOptions() {
+    const destinationSelect = document.getElementById('destination');
+    const timeSelect = document.getElementById('time');
+    const selectedDestination = destinationSelect.value;
+    
+    timeSelect.innerHTML = '<option value="">Set Time for reservation</option>'; // Reset time options
+
+    if (selectedDestination && timeOptions[selectedDestination]) {
+        timeOptions[selectedDestination].forEach(time => {
+            const option = document.createElement('option');
+            option.value = time;
+            option.textContent = time;
+            timeSelect.appendChild(option);
+        });
+    }
+}
+
+function bookBus(event) {
+    event.preventDefault();
+    const destinationSelect = document.getElementById('destination');
+    const destination = destinationSelect.value;
+    const dateInput = document.getElementById('date');
+    const date = new Date(dateInput.value);
+    const time = document.getElementById('time').value;
+    const seats = parseInt(document.getElementById('seats').value);
+    const price = parseInt(document.getElementById('price').value.substring(1));
+    const email = document.getElementById('gmail-email').value;
+    const name = document.getElementById('name').value;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (destination && date && time && seats && email) {
+        if (date > today) {
+            alert('Please select a date that is today or in the future.');
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            alert('Please enter a valid Gmail address');
+            return;
+        }
+
+        const booking = {
+            destination,
+            date: dateInput.value,
+            time,
+            seats,
+            price,
+            email,
+            name
+        };
+
+        const historyList = document.getElementById('history-list');
+        const listItem = document.createElement('li');
+        listItem.textContent = `Destination: ${booking.destination}, Name: ${booking.name}, Email: ${booking.email}, Date: ${booking.date}, Time: ${booking.time}, Seats: ${booking.seats}`;
+        const cancelButton = document.createElement('button');
+        cancelButton.textContent = 'Cancel Booking';
+        cancelButton.className = 'cancel-button';
+        cancelButton.onclick = function() { cancelBooking(listItem, booking.price); };
+        listItem.appendChild(cancelButton);
+        historyList.appendChild(listItem);
+
+        const paymentList = document.getElementById('payment-list');
+        const paymentItem = document.createElement('li');
+        paymentItem.textContent = `Amount Paid: ₱${booking.price}`;
+        paymentList.appendChild(paymentItem);
+
+        const scheduleList = document.getElementById('schedule-list');
+        const scheduleItem = document.createElement('li');
+        scheduleItem.textContent = `Date: ${booking.date}, Time: ${booking.time}`;
+        scheduleList.appendChild(scheduleItem);
+
+        alert('Bus booked successfully!');
+        document.getElementById('booking-form').reset();
+        updatePrice(); 
+        updateTimeOptions(); 
+    } else {
+        alert('Please fill in all fields.');
+    }
+}
+
+function cancelBooking(bookingItem, price) {
+    const refundAmount = price / 2;
+    alert(`Cancellation Successful! Refund Amount: ₱${refundAmount}`);
+    const paymentList = document.getElementById('payment-list');
+    const paymentItems = paymentList.getElementsByTagName('li');
+    const lastPaymentItem = paymentItems[paymentItems.length - 1];
+    lastPaymentItem.textContent = `Refund Amount: ₱${refundAmount}`;
+    bookingItem.remove();
+}
+    </script>
+</body>
+</html>

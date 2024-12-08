@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver UI</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #1e272e; 
+  color: #fff; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 130vh;
+  margin: 0;
+}
+
+.dashboard {
+  width: 90%;
+  max-width: 2000px;
+  background-color: #34495e; 
+  border: 2px solid #2c3e50; 
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 1em;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.top-section, .middle-section, .bottom-section, .booking-history {
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.middle-section {
+  border-bottom: none;
+}
+
+.gps-map, .notification-center, .speedometer, .gauge, .odometer, .temp-control, .door-control, .passenger-count, .time-date, .route-info, .communication-panel, .settings-menu, .booking-history {
+  flex: 1;
+  min-width: 250px;
+  text-align: center;
+}
+
+.gps-map, .notification-center {
+  background-color: #2c3e50; 
+  padding: 20px;
+  border-radius: 5px; 
+}
+
+.speedometer {
+  font-size: 2em;
+  color: #2ecc71; 
+}
+
+.gauge, .odometer, .temp-control, .door-control, .passenger-count {
+  font-size: 1.2em;
+}
+
+.comm-btn {
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  background-color: #3498db; 
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center; 
+  width: 130px; 
+}
+
+.comm-btn:hover {
+  background-color: #2980b9; 
+}
+
+.booking-history {
+  text-align: center; 
+  border-top: 1px solid #2c3e50; 
+  margin-top: 20px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.booking-history h2 {
+  margin: 0;
+  font-size: 1.5em;
+  margin-bottom: 20px; /* Add space between heading and table */
+}
+
+#booking-list {
+  width: 100%; /* Ensure table takes full width within the container */
+  list-style: none;
+  padding: 0;
+}
+
+table {
+  margin: 0 auto; /* Center the table */
+  border-collapse: collapse;
+  width: 80%;
+  font-family: Arial, sans-serif;
+}
+
+th, td {
+  border: 1px solid #2980b9;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #2c3e50;
+  color: #e3e6ec;
+}
+
+tr:nth-child(even) {
+  background-color: #2c3e50;
+}
+
+.notification-center {
+        background-color: #050e2c;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+    }
+    #notification-list {
+        list-style-type: none;
+        padding: 0;
+    }
+    #notification-list li {
+        padding: 10px;
+        border-bottom: 1px solid #fff0f0;
+    }
+
+#map {
+  width: 100%;
+  height: 300px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5); 
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #34495e; 
+  padding: 20px;
+  border: 1px solid #2c3e50; 
+  border-radius: 5px;
+  width: 80%; 
+  max-width: 500px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.close {
+  color: #ccc;
+  float: right;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #fff; 
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.settings-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.comm-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+.dropdown-content a:hover {
+  background-color: #278ac4;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #282b33;
+  border: 1px solid #1a1361;
+  z-index: 1000;
+  padding: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  max-width: 400px;
+  width: 80%;
+}
+
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.settings-menu:hover .dropdown-content {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .top-section, .middle-section, .bottom-section, .booking-history {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .comm-btn {
+    width: 100%;
+  }
+}
+
+
+.view-trips-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.view-trips-btn:hover {
+    background-color: #219d54;
+}
+
+.booking-history {
+  
+    text-align: center; /* Center-align the content */
+}
+
+#upcoming-trips {
+    display: inline-block; /* Make the container inline-block to center it */
+    width: 70%; /* Set the width to 70% of its parent container */
+    margin-top: 20px; /* Add some top margin */
+}
+
+#upcoming-trips-table th {
+    background-color: #2c3e50;
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <header>
+      <h1>COMMUSWIFT DRIVER</h1>
+  </header>
+    <div class="top-section">
+      <!-- Embedded map -->
+      <div class="gps-map">
+        <iframe src="https://my.atlist.com/map/9a8b69ac-1f60-4e01-89e2-175bd82bb7a7/?share=true" allow="geolocation 'self' https://my.atlist.com" width="100%" height="300" loading="lazy" frameborder="0" scrolling="no" allowfullscreen id="atlist-embed"></iframe>
+      </div>
+
+      <div class="notification-center">
+        <h2>Notification Center</h2>
+        <ul id="notification-list">
+        </ul>
+      </div>
+    </div>
+
+    <div class="middle-section">
+      <div class="speedometer">60 mph</div>
+      <div class="gauge fuel-gauge">Fuel: 75%</div>
+      <div class="gauge battery-status">Battery: 100%</div>
+      <div class="odometer">Odometer: 12000 miles</div>
+      <div class="temp-control">Temp: 19°F</div>
+      <div class="passenger-count">Passengers: 21</div>
+    </div>
+    <div class="bottom-section">
+      <div class="time-date">Time: 12:00 PM</div>
+      <div class="route-info">Route: Camp 7, Next: Stop A, ETA: 5 mins</div>
+
+      <!-- Update the communication-panel div in your HTML -->
+    <div class="communication-panel">
+      <button class="comm-btn" onclick="triggerEmergency()">Emergency</button>
+    </div>
+
+      <!-- Settings menu -->
+      <div class="settings-menu">
+        <button class="comm-btn" id="settings-btn">Settings</button>
+        <div id="settings-dropdown" class="dropdown-content">
+          <a href="#" id="personal-info">Personal Information</a>
+          <a href="#" id="report">Report</a>
+          <a href="#" id="about">About</a>
+          <a href="#" id="log-out">Log Out</a>
+          <a href="#" id="notification-settings">Notification Settings</a>
+      </div>
+    </div>
+    
+    <div id="personal-info-popup" class="popup">
+        <span class="close-btn" onclick="closePopup('personal-info-popup')">&times;</span>
+        <h2>Personal Information</h2>
+        <p>Name: Raniel Domigsi</p>
+        <p>Contact Number: 0969-000-0980</p>
+        <p>Bio: Study First, Why you stalking me huh?.</p>
+        <p>Gender: Male</p>
+    </div>
+
+    <div id="notification-settings-popup" class="popup">
+      <span class="close-btn" onclick="closePopup('notification-settings-popup')">&times;</span>
+      <h2>Notification Settings</h2>
+      <p>Select which notifications you want to receive:</p>
+      <label><input type="checkbox" checked> Reservations</label><br>
+      <label><input type="checkbox" checked> Cancellations</label><br>
+      <label><input type="checkbox" checked> System Alerts</label><br>
+      <button onclick="saveNotificationSettings()">Save</button>
+  </div>
+    
+    <div id="report-popup" class="popup">
+        <span class="close-btn" onclick="closePopup('report-popup')">&times;</span>
+        <h2>Report</h2>
+        <input type="text" id="report-input" placeholder="Type your report here...">
+        <button id="send-report">Send Report</button>
+    </div>
+    
+    <div id="about-popup" class="popup">
+        <span class="close-btn" onclick="closePopup('about-popup')">&times;</span>
+        <h2>About Bus Reservation System</h2>
+        <p>This system is designed to facilitate bus reservation for passengers.</p>
+    </div>
+    
+    <div id="logout-popup" class="popup">
+        <span class="close-btn" onclick="closePopup('logout-popup')">&times;</span>
+        <h2>Log Out</h2>
+        <p>Do you want to log out of your account?</p>
+        <button id="logout-yes">Yes</button>
+        <button id="logout-no">No</button>
+    </div>
+    
+    
+    </div>
+    
+    <div class="booking-history">
+      <h2>Booking History</h2>
+      <button class="view-trips-btn" onclick="toggleUpcomingTrips()">View Upcoming Trips</button>
+      <div id="upcoming-trips" style="display: none;">
+          <h3>Upcoming Trips</h3>
+          <table id="upcoming-trips-table">
+              <thead>
+                  <tr>
+                      <th>Time</th>
+                      <th>Date</th>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Passengers</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td>08:00 AM</td>
+                      <td>05/26/2024</td>
+                      <td>Camp 7</td>
+                      <td>Stop A</td>
+                      <td>1</td>
+                  </tr>
+                  <tr>
+                      <td>08:00 AM</td>
+                      <td>05/26/2024</td>
+                      <td>Irisan</td>
+                      <td>Stop B</td>
+                      <td>2</td>
+                  </tr>
+                  <tr>
+                      <td>08:00 AM</td>
+                      <td>05/26/2024</td>
+                      <td>Loakan</td>
+                      <td>Stop C</td>
+                      <td>1</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+  
+
+  <script>
+
+let counter = 0;
+
+function generateRandomNotification() {
+    const names = ['Lea', 'John', 'Emma', 'Alex', 'Sophia', 'Xynite', 'Ace', 'Lalatina', 'Kazuma', 'Naruto', 'Jaminez'];
+    const activities = ['booked a seat at camp 7', 'just booked a seat at route B on Camp 7', 'cancelled a book'];
+    const times = ['9:00 pm', '1:00 am', '12:00 am', '10:00 pm', '11:00 pm'];
+
+    const name = names[Math.floor(Math.random() * names.length)];
+    const activity = activities[Math.floor(Math.random() * activities.length)];
+    const time = times[Math.floor(Math.random() * times.length)];
+
+    return `${name} has just ${activity} on ${time}`;
+}
+
+    function addNotification() {
+        const notificationList = document.getElementById('notification-list');
+        const notificationItem = document.createElement('li');
+        notificationItem.textContent = generateRandomNotification();
+        notificationList.insertBefore(notificationItem, notificationList.firstChild);
+        counter++;
+        if (counter >= 7) {
+            counter = 0;
+            clearNotifications();
+        }
+    }
+
+    function clearNotifications() {
+        const notificationList = document.getElementById('notification-list');
+        while (notificationList.firstChild) {
+            notificationList.removeChild(notificationList.firstChild);
+        }
+    }
+
+    // Add a new notification every 4 seconds
+    setInterval(addNotification, 4000);
+
+    function toggleUpcomingTrips() {
+    const upcomingTripsDiv = document.getElementById("upcoming-trips");
+
+    if (upcomingTripsDiv.style.display === "none") {
+        upcomingTripsDiv.style.display = "block";
+    } else {
+        upcomingTripsDiv.style.display = "none";
+    }
+}
+
+document.getElementById("notification-settings").addEventListener("click", function() {
+    togglePopup("notification-settings-popup");
+});
+
+function saveNotificationSettings() {
+    // Logic to save settings
+    console.log("Notification settings saved!");
+    closePopup("notification-settings-popup");
+}
+
+function markAsRead(button) {
+    const li = button.parentElement;
+    li.style.textDecoration = 'line-through';
+}
+
+function deleteNotification(button) {
+    const li = button.parentElement;
+    li.remove();
+}
+
+    // Function to send a sample request to the server
+    function sendRequest() {
+        // Sample request data
+        const requestData = {
+            username: "john_doe",
+            action: "get_data"
+        };
+
+        // Send a POST request to the server
+        fetch('/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response from the server
+            console.log('Server Response:', data);
+            // Example: Update the UI with the received data
+            // document.getElementById('output').innerText = JSON.stringify(data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Call the sendRequest function when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        sendRequest();
+    });
+
+
+        var modal = document.createElement("div");
+        modal.classList.add("modal");
+
+        var settingsBtn = document.querySelector(".settings-menu button");
+
+        var span = document.createElement("span");
+        span.classList.add("close");
+        span.innerHTML = "&times;";
+
+        modal.appendChild(span);
+
+        var modalContent = document.createElement("div");
+        modalContent.classList.add("modal-content");
+
+        modal.appendChild(modalContent);
+
+        document.body.appendChild(modal);
+
+        settingsBtn.onclick = function() {
+            modal.style.display = "flex";
+        }
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+            modal.style.display = "none";
+            }
+        }
+
+
+        function fetchLiveData() {
+    // Mock data fetching function
+    return {
+        speed: Math.floor(Math.random() * 100) + ' mph',
+        fuel: 'Fuel: ' + Math.floor(Math.random() * 100) + '%',
+        battery: 'Battery: ' + Math.floor(Math.random() * 100) + '%',
+        odometer: 'Odometer: ' + Math.floor(Math.random() * 20000) + ' miles',
+        temp: 'Temp: ' + (Math.floor(Math.random() * 30) - 10) + '°F',
+        passengers: 'Passengers: ' + Math.floor(Math.random() * 21),
+        time: 'Time: ' + new Date().toLocaleTimeString(),
+        route: 'Route: Camp 7, Next: Stop ' + String.fromCharCode(65 + Math.floor(Math.random() * 6)) + ', ETA: ' + Math.floor(Math.random() * 15) + ' mins'
+    };
+}
+
+function updateDashboard() {
+    const data = fetchLiveData();
+
+    document.querySelector('.speedometer').textContent = data.speed;
+    document.querySelector('.fuel-gauge').textContent = data.fuel;
+    document.querySelector('.battery-status').textContent = data.battery;
+    document.querySelector('.odometer').textContent = data.odometer;
+    document.querySelector('.temp-control').textContent = data.temp;
+    document.querySelector('.passenger-count').textContent = data.passengers;
+    document.querySelector('.time-date').textContent = data.time;
+    document.querySelector('.route-info').textContent = data.route;
+}
+
+setInterval(updateDashboard, 3000);
+
+function triggerEmergency() {
+    const emergencyBtn = document.querySelector('.comm-btn');
+    emergencyBtn.style.backgroundColor = '#e74c3c';
+    emergencyBtn.textContent = 'Emergency Triggered';
+
+    console.log("Emergency signal sent!");
+
+    setTimeout(() => {
+        emergencyBtn.style.backgroundColor = '#3498db';
+        emergencyBtn.textContent = 'Emergency';
+    }, 3000);
+}
+      document.getElementById("settings-btn").addEventListener("click", function() {
+                var dropdown = document.getElementById("settings-dropdown");
+                if (dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                } else {
+                    dropdown.style.display = "block";
+                }
+            });
+
+            function closePopup(popupId) {
+                document.getElementById(popupId).style.display = "none";
+            }
+
+            document.getElementById("personal-info").addEventListener("click", function() {
+                hideAllPopups();
+                document.getElementById("personal-info-popup").style.display = "block";
+            });
+
+
+        function togglePopup(popupId) {
+                var popup = document.getElementById(popupId);
+                if (popup.style.display === "block") {
+                    popup.style.display = "none";
+                } else {
+                
+                    var popups = document.getElementsByClassName("popup");
+                    for (var i = 0; i < popups.length; i++) {
+                        popups[i].style.display = "none";
+                    }
+                    popup.style.display = "block";
+                }
+            }
+
+    // Setting
+    function closePopup(popupId) {
+        var popup = document.getElementById(popupId);
+        popup.style.display = "none";
+    }
+
+    document.getElementById("settings-btn").addEventListener("click", function() {
+        togglePopup("settings-dropdown");
+    });
+
+    document.getElementById("personal-info").addEventListener("click", function() {
+        togglePopup("personal-info-popup");
+    });
+
+    document.getElementById("report").addEventListener("click", function() {
+        togglePopup("report-popup");
+    });
+
+    document.getElementById("about").addEventListener("click", function() {
+        togglePopup("about-popup");
+    });
+
+    document.getElementById("log-out").addEventListener("click", function() {
+        togglePopup("logout-popup");
+    });
+
+    document.getElementById("logout-yes").addEventListener("click", function() {
+        console.log("Logging out...");
+        closePopup("logout-popup");
+    });
+
+    document.getElementById("logout-no").addEventListener("click", function() {
+        closePopup("logout-popup");
+    });
+
+
+    document.getElementById("send-report").addEventListener("click", function() {
+        var reportInput = document.getElementById("report-input").value;
+
+        console.log("Report sent: " + reportInput);
+        closePopup("report-popup");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin UI</title>
+</head>
+<body>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    background-color: #34495e;
+    color: #ecf0f1;
+    padding: 1em;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    background-color: #34495e;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: #ecf0f1;
+    text-decoration: none;
+    padding: 1em;
+    display: block;
+}
+
+nav ul li a:hover {
+    background-color: #2980b9;
+    color: #fff;
+}
+
+main {
+    flex: 1;
+    padding: 1em;
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+button {
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    margin-bottom: 1em;
+}
+
+button:hover {
+    background-color: #3498db;
+}
+
+form {
+    margin-top: 1em;
+    background-color: #34495e;
+    padding: 1em;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form label, form input, form select {
+    display: block;
+    margin-bottom: 0.5em;
+    width: 100%;
+}
+
+form input, form select {
+    padding: 0.5em;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+.form-popup {
+    background-color: rgba(44, 62, 80, 0.9);
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#metrics p, #notifications ul {
+    background-color: #34495e;
+    padding: 1em;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #236c7a;
+}
+    </style>
+    <div id="container">
+        <header>
+            <h1>COMMUSWIFT ADMIN</h1>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="#dashboard" onclick="showSection('dashboard')">Dashboard</a></li>
+                <li><a href="#routes" onclick="showSection('routes')">Routes</a></li>
+                <li><a href="#drivers" onclick="showSection('drivers')">Drivers</a></li>
+                <li><a href="#vehicles" onclick="showSection('vehicles')">Vehicles</a></li>
+                <li><a href="#schedules" onclick="showSection('schedules')">Schedules</a></li>
+            </ul>
+        </nav>
+        <main>
+            <section id="dashboard" class="content-section">
+                <h2>Dashboard</h2>
+                <div id="metrics">
+                    <table>
+                    <tr>
+                        <th>Active Routes:</th>
+                        <th>Total Passengers Today:</th>
+                    </tr>
+                    <tr>
+                        <td>Loakan</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <td>Camp 7</td>
+                        <td>16</td>
+                    </tr>
+                    <tr>
+                        <td>Teachers Camp</td>
+                        <td>11</td>
+                    </tr>
+                    <tr>
+                        <td>Irisan</td>
+                        <td>19</td>
+                    </tr>
+
+                </table>
+                </div>
+                <div id="notifications">
+                    <h3>Notifications</h3>
+                        <table>
+                            <tr>
+                           <td>Vehicle XYZ needs maintenance</td>
+                            </tr>  
+                            <tr>
+                           <td>New Driver application received</td>
+                            </tr> 
+                            <tr>
+                           <td>New Commuter sign in received</td>
+                            </tr>  
+                            <tr>
+                          <td>New Driver application received</td>
+                            </tr>    
+                            <tr>
+                           <td>New Driver has been added</td>
+                            </tr>  
+                            <tr>
+                            <td>New Shedule has added</td>
+                            </tr>    
+                    </table>
+                    <div id="reports">
+                        <h3>Reports</h3>
+                        <table>
+                            <tr>
+                                <td>Emergency Report on Route 1 - Reported ID Driver by - 010</td>
+                            </tr>
+                            <tr>
+                                <td>Please inform all drivers about the scheduled maintenance break.</td>
+                            </tr>
+                            <tr>
+                                <td>Certain bugs and issues reported by users will be addressed during this maintenance window to improve user experience.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="routes" class="content-section" style="display: none;">
+                <div id="routes">
+                    <h2>Routes</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Route ID</th>
+                                <th>Route Name</th>
+                                <th>Operation Hours</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>route 1</td>
+                                <td>Camp 7</td>
+                                <td>9:00 PM - 1:30 AM</td>
+                            </tr>
+                            <tr>
+                                <td>route 2</td>
+                                <td>Irisan</td>
+                                <td>9:00 PM - 2:00 AM</td>
+                            </tr>
+                            <tr>
+                                <td>route 3</td>
+                                <td>Loakan</td>
+                                <td>9:00 PM - 1:00 AM</td>
+                            </tr>
+                            <tr>
+                                <td>route 4</td>
+                                <td>Teachers Camp</td>
+                                <td>9:00 PM - 12:00 AM</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="drivers" class="content-section" style="display: none;">
+            <h2>Drivers</h2>
+            <div id="drivers">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Driver ID</th>
+                            <th>Driver Name</th>
+                            <th>License Number</th>
+                            <th>Route Assigned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>010</td>
+                            <td>John Doe</td>
+                            <td>XYZ123456</td>
+                            <td>Camp 7</td>
+                        </tr>
+                        <tr>
+                            <td>020</td>
+                            <td>Jhonny Sins</td>
+                            <td>ABC987654</td>
+                            <td>Irisan</td>
+                        </tr>
+                        <tr>
+                            <td>030</td>
+                            <td>Cardo Dalisay</td>
+                            <td>XYZ123456</td>
+                            <td>Loakan</td>
+                        </tr>
+                        <tr>
+                            <td>040</td>
+                            <td>Stephen Curry</td>
+                            <td>TZY129398</td>
+                            <td>Camp 7</td>
+                        </tr>
+                        <tr>
+                            <td>050</td>
+                            <td>Lebron James</td>
+                            <td>VXW2324212</td>
+                            <td>Teachers Camp</td>
+                        </tr>
+                        <tr>
+                            <td>060</td>
+                            <td>Gian Luis</td>
+                            <td>VXW3132341</td>
+                            <td>Teachers Camp</td>
+                        </tr>
+                        <tr>
+                            <td>070</td>
+                            <td>Marc Rayver</td>
+                            <td>TZY1341242</td>
+                            <td>Camp 7</td>
+                        </tr>
+                        <tr>
+                            <td>080</td>
+                            <td>King Ramirez</td>
+                            <td>VXW2323131</td>
+                            <td>Irisan</td>
+                        </tr>
+                        <tr>
+                            <td>090</td>
+                            <td>Nathan Caoile</td>
+                            <td>TZY23241112</td>
+                            <td>Teachers Camp</td>
+                        </tr><tr>
+                            <td>011</td>
+                            <td>Chris Sotelo</td>
+                            <td>ABC221233</td>
+                            <td>Loakan</td>
+                        </tr>
+                        </tr>
+                        <tr>
+                            <td>012</td>
+                            <td>Phanuel Ngipol</td>
+                            <td>ABC888123</td>
+                            <td>Loakan</td>
+                        </tr>
+                        <tr>
+                            <td>013</td>
+                            <td>Nathan Dela Rosa</td>
+                            <td>TZY124324</td>
+                            <td>Camp 7</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+            </div>
+            </section>
+            
+            <section id="vehicles" class="content-section" style="display: none;">
+                <h2>Vehicles</h2>
+                <div id="vehicles">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Vehicle ID</th>
+                                <th>Vehicle Model</th>
+                                <th>License Plate</th>
+                                <th>Route Assigned</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>001</td>
+                                <td>Modern Jeepney</td>
+                                <td>ABC-123</td>
+                                <td>Camp 7</td>
+                            </tr>
+                            <tr>
+                                <td>002</td>
+                                <td>Local Jeepney</td>
+                                <td>DEF-456</td>
+                                <td>Irisan</td>
+                            </tr>
+
+                            <tr>
+                                <td>003</td>
+                                <td>Modern Jeepney</td>
+                                <td>DEF-234</td>
+                                <td>Camp 7</td>
+                            </tr>
+
+                            <tr>
+                                <td>004</td>
+                                <td>Modern Jeepney</td>
+                                <td>TZY-160</td>
+                                <td>Loakan</td>
+                            </tr>
+
+                            <tr>
+                                <td>005</td>
+                                <td>Local Jeepney</td>
+                                <td>ABC-911</td>
+                                <td>Irisan</td>
+                            </tr>
+
+                            <tr>
+                                <td>006</td>
+                                <td>Local Jeepney</td>
+                                <td>TZY-069</td>
+                                <td>Camp 7</td>
+                            </tr>
+
+                            <tr>
+                                <td>007</td>
+                                <td>Modern Jeepney</td>
+                                <td>WBC-123</td>
+                                <td>Loakan</td>
+                            </tr>
+
+                            <tr>
+                                <td>008</td>
+                                <td>Local Jeepney</td>
+                                <td>WBC-696</td>
+                                <td>Teachers Camp</td>
+                            </tr>
+
+                            <tr>
+                                <td>009</td>
+                                <td>Local Jeepney</td>
+                                <td>TZY-090</td>
+                                <td>Teachers Camp</td>
+                            </tr>
+
+                            <tr>
+                                <td>010</td>
+                                <td>Modern Jeepney</td>
+                                <td>WBC-453</td>
+                                <td>Teachers Camp</td>
+                            </tr>
+
+                            <tr>
+                                <td>011</td>
+                                <td>Modern Jeepney</td>
+                                <td>ABC-983</td>
+                                <td>Loakan</td>
+                            </tr>
+
+                            <tr>
+                                <td>012</td>
+                                <td>Local Jeepney</td>
+                                <td>TZY-143</td>
+                                <td>Camp 7</td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                    
+                </div>
+                </section>
+
+                <section id="schedules" class="content-section" style="display:none;">
+                    <h2>Schedules</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Route</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Mon-Fri</td>
+                                    <td>Route 1 - Camp 7</td>
+                                    <td>9:00 PM - 1:30 AM</td>
+                                </tr>
+                                <tr>
+                                    <td>Mon - Fri</td>
+                                    <td>Route 2 - Irisan</td>
+                                    <td>9:00 PM - 1:00 AM</td>
+                                </tr>
+                                <tr>
+                                    <td>Mon-Fri</td>
+                                    <td>Route 3 - Loakan</td>
+                                    <td>9:00 PM - 2:00 AM</td>
+                                </tr>
+                                <tr>
+                                    <td>Mon-Fri</td>
+                                    <td>Route 4 - Teachers Camp</td>
+                                    <td>9:00 PM - 12:00 AM</td>
+                                </tr>                                
+                            </tbody>
+                        </table>    
+
+                    </div>
+                </section>             
+        </main>
+    </div>
+    <script>
+
+function showSection(sectionId) {
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => {
+        section.style.display = 'none';
+    });
+
+    const activeSection = document.getElementById(sectionId);
+    if (activeSection) {
+        activeSection.style.display = 'block';
+    }
+}
+
+function showForm(formId) {
+    const form = document.getElementById(formId);
+    if (form) {
+        form.style.display = 'block';
+    }
+}
+
+function hideForm(formId) {
+    const form = document.getElementById(formId);
+    if (form) {
+        form.style.display = 'none';
+    }
+}
+
+function addRoute() {
+    const routeName = document.getElementById('routeName').value;
+    if (routeName) {
+        const routeList = document.getElementById('routeList').querySelector('ul');
+        const newRoute = document.createElement('li');
+        newRoute.textContent = routeName;
+        routeList.appendChild(newRoute);
+        document.getElementById('routeName').value = '';
+        hideForm('addRouteForm');
+    }
+}
+
+function addDriver() {
+    const driverName = document.getElementById('driverName').value;
+    if (driverName) {
+        const driverList = document.getElementById('driverList').querySelector('ul');
+        const newDriver = document.createElement('li');
+        newDriver.textContent = `${driverName}: Assigned to Route`;
+        driverList.appendChild(newDriver);
+        document.getElementById('driverName').value = '';
+        hideForm('addDriverForm');
+    }
+}
+
+function addVehicle() {
+    const vehicleId = document.getElementById('vehicleId').value;
+    if (vehicleId) {
+        const vehicleList = document.getElementById('vehicleList').querySelector('ul');
+        const newVehicle = document.createElement('li');
+        newVehicle.textContent = `${vehicleId}: In service`;
+        vehicleList.appendChild(newVehicle);
+        document.getElementById('vehicleId').value = '';
+        hideForm('addVehicleForm');
+    }
+}
+
+
+    
+
+function generateReport() {
+    alert('Generating report...');
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    showSection('dashboard');
+});
+
+    </script>
+</body>
+</html>
